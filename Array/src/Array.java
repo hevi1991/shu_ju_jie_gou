@@ -74,17 +74,30 @@ public class Array<E> {
      * @param e     元素内容
      */
     public void add(int index, E e) {
-        if (size == data.length) {
-            throw new IllegalArgumentException("Add faild. Array is full.");
-        }
         if (index < 0 || index > size) {//下标非法
             throw new IllegalArgumentException("Add faild. Require index >= 0 and index <= size.");
+        }
+        if (size == data.length) {//动态扩容
+            resize(2 * data.length);//为什么只扩2倍容量或者说不扩容1个，因为性能的优化
         }
         for (int i = size - 1; i >= index; i--) {//大于指定位置的后续元素，往后拖
             data[i + 1] = data[i];
         }
         data[index] = e;
         size++;
+    }
+
+    /**
+     * 更新data容量
+     *
+     * @param newCapacity 新容量大小
+     */
+    private void resize(int newCapacity) {
+        E[] newData = (E[]) new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[i];
+        }
+        data = newData;
     }
 
     /**
@@ -159,6 +172,9 @@ public class Array<E> {
         }
         size--;
         data[size] = null;
+        if (size == data.length / 2) {//少于一半的时候，重新设定容量
+            resize(data.length / 2);
+        }
         return ret;
     }
 
