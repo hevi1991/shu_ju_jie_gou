@@ -4,18 +4,22 @@
 public class Main {
 
     public static void main(String[] args) {
-        int[] arr = new int[10];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = i;
+        Array<Integer> arr = new Array<>(20);
+        for (int i = 0; i < 10; i++) {
+            arr.push(i);
         }
+        System.out.println(arr);
 
-        int[] scores = new int[]{100, 99, 66};
-        for (int i = 0; i < scores.length; i++) {
-            System.out.println(scores[i]);
-        }
+        arr.add(1, 100);
+        System.out.println(arr);
 
-        for (int score : scores) {
-            System.out.println(score);
-        }
+        arr.pushLeft(-1);
+        System.out.println(arr);
+
+        arr.remove(2);
+        System.out.println(arr);
+
+        arr.removeElement(4);
+        System.out.println(arr);
     }
 }
