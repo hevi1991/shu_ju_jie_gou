@@ -1,3 +1,7 @@
+package array;
+
+import obj.Student;
+
 /**
  * 数组
  */
@@ -10,7 +14,7 @@ public class Array<E> {
      *
      * @param capacity 容量
      */
-    Array(int capacity) {
+    public Array(int capacity) {
         data = (E[]) new Object[capacity];
         size = 0;
     }
@@ -51,6 +55,7 @@ public class Array<E> {
 
     /**
      * 增：数组末尾添加
+     * O(1)
      *
      * @param e 元素内容
      */
@@ -60,6 +65,7 @@ public class Array<E> {
 
     /**
      * 增：数组头添加
+     * O(n), 因为要挪size-1次
      *
      * @param e 元素内容
      */
@@ -69,6 +75,8 @@ public class Array<E> {
 
     /**
      * 增：在index位置，插入元素e
+     * 概率论知识才能计算时间复杂度，有个期望的概念。
+     * O(n/2) = O(n) 通常取最糟糕的情况，及pushLeft，所以添加的时间复杂度是O(n)
      *
      * @param index 下标
      * @param e     元素内容
@@ -89,6 +97,7 @@ public class Array<E> {
 
     /**
      * 更新data容量
+     * O(n)
      *
      * @param newCapacity 新容量大小
      */
@@ -102,11 +111,12 @@ public class Array<E> {
 
     /**
      * 查：取得索引对应元素内容
+     * O(1)
      *
      * @param index 索引
      * @return 元素内容
      */
-    E get(int index) {
+    public E get(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("Get failed, index over range.");
         }
@@ -115,6 +125,7 @@ public class Array<E> {
 
     /**
      * 查：包含
+     * O(n)
      *
      * @param e 内容
      * @return 结果
@@ -130,6 +141,7 @@ public class Array<E> {
 
     /**
      * 查找第一个数组中元素e所在索引，
+     * O(n)
      *
      * @param e 内容
      * @return 不存在返回-1，否则返回对应索引
@@ -162,7 +174,7 @@ public class Array<E> {
      * @param index 索引
      * @return 元素内容
      */
-    E remove(int index) {
+    public E remove(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("Remove failed, index over range.");
         }
@@ -172,7 +184,7 @@ public class Array<E> {
         }
         size--;
         data[size] = null;
-        if (size == data.length / 2) {//少于一半的时候，重新设定容量
+        if (size == data.length / 4 && data.length / 2 != 0) {//少于一半的时候，重新设定容量
             resize(data.length / 2);
         }
         return ret;
@@ -180,28 +192,31 @@ public class Array<E> {
 
     /**
      * 删：删除第一位，并取出结果
+     * O(n)
      *
      * @return 元素内容
      */
-    E pullLeft() {
+    public E popLeft() {
         return remove(0);
     }
 
     /**
      * 删：删除最后一位，并取出结果
+     * O(1)
      *
      * @return 元素内容
      */
-    E pull() {
+    public E pop() {
         return remove(size - 1);
     }
 
     /**
      * 删：删除第一个元素内容的对应元素
+     * O(n/2)
      *
      * @param e 元素内容
      */
-    boolean removeElement(E e) {
+    public boolean removeElement(E e) {
         boolean flag = false;
         int index = find(e);
         if (index != -1) {
@@ -232,5 +247,9 @@ public class Array<E> {
         arr.push(new Student("Bob", 90));
         arr.push(new Student("Charlie", 80));
         System.out.println(arr);
+    }
+
+    public E getLast() {
+        return get(size - 1);
     }
 }
