@@ -241,15 +241,22 @@ public class Array<E> {
         return res.toString();
     }
 
-    public static void main(String[] args) {
-        Array<Student> arr = new Array<>();
-        arr.push(new Student("Alice", 100));
-        arr.push(new Student("Bob", 90));
-        arr.push(new Student("Charlie", 80));
-        System.out.println(arr);
-    }
 
+    /**
+     * 查看最后一个
+     *
+     * @return 内容
+     */
     public E getLast() {
         return get(size - 1);
+    }
+
+    /**
+     * 查看第一个
+     *
+     * @return 内容
+     */
+    public E getFirst() {
+        return get(0);
     }
 }
