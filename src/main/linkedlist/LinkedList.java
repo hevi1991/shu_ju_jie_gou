@@ -2,6 +2,7 @@ package linkedlist;
 
 /**
  * 链表
+ * O(n)
  *
  * @param <E>
  */
@@ -33,11 +34,14 @@ public class LinkedList<E> {
         }
     }
 
-    private Node head;
+    /**
+     * 虚拟头结点
+     */
+    private Node dummyHead;
     int size;
 
     public LinkedList() {
-        head = null;
+        dummyHead = new Node(null);
         size = 0;
     }
 
@@ -65,14 +69,7 @@ public class LinkedList<E> {
      * @param e
      */
     public void addFirst(E e) {
-        /*
-        Node node = new Node(e);
-        node.next = head;
-        head = node;
-        等于下面一句话
-        */
-        head = new Node(e, head);
-        size++;
+        add(0, e);
     }
 
     /**
@@ -85,25 +82,21 @@ public class LinkedList<E> {
         if (index < 0 || index > size) {
             throw new IllegalArgumentException("Add failded. Illegal index.");
         }
-        if (index == 0) {
-            //第一个节点是不存在上一个节点的，所以这里直接调用addFirst。可以使用虚拟的链表头节点
-            addFirst(e);
-        } else {
-            //第一个引用节点
-            Node prev = this.head;
-            //取得需要赋值的索引的上一个引用节点
-            for (int i = 0; i < index - 1; i++) {
-                prev = prev.next;
-            }
-            //创建需要添加的节点
-            /*
-            Node node = new Node(e);
-            node.next = prev.next;
-            prev.next = node;
-            */
-            prev.next = new Node(e, prev.next);
-            size++;
+        //第一个引用节点
+        Node prev = dummyHead;
+        //取得需要赋值的索引的上一个引用节点，由于使用了虚拟头结点（相当于index：-1），所以这里index不需要-1
+        for (int i = 0; i < index; i++) {
+            prev = prev.next;
         }
+        //创建需要添加的节点
+        /*
+        Node node = new Node(e);
+        node.next = prev.next;
+        prev.next = node;
+        等于下面一句话
+        */
+        prev.next = new Node(e, prev.next);
+        size++;
     }
 
     /**
@@ -112,6 +105,117 @@ public class LinkedList<E> {
      * @param e
      */
     public void addLast(E e) {
-        add(size - 1, e);
+        add(size, e);
+    }
+
+    /**
+     * 取得索引下的元素内容
+     *
+     * @param index
+     * @return
+     */
+    public E get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("Get failed. Illegal index.");
+        }
+        Node cur = dummyHead.next;
+        for (int i = 0; i < index; i++) {
+            cur = cur.next;
+        }
+        return cur.e;
+    }
+
+    /**
+     * 获取第一个链表元素
+     *
+     * @return
+     */
+    public E getFirst() {
+        return get(0);
+    }
+
+    /**
+     * 获取最后一个链表元素
+     *
+     * @return
+     */
+    public E getLast() {
+        return get(size - 1);
+    }
+
+    /**
+     * 设置目标索引为新元素
+     *
+     * @param index
+     * @param e
+     */
+    public void set(int index, E e) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("Set failed. Illegal index.");
+        }
+        Node cur = dummyHead.next;
+        for (int i = 0; i < index; i++) {
+            cur = cur.next;
+        }
+        cur.e = e;
+    }
+
+    /**
+     * 查找链表中是否存在元素e
+     *
+     * @param e
+     * @return
+     */
+    public boolean contains(E e) {
+        Node cur = dummyHead.next;
+        while (cur != null) {
+            if (cur.e.equals(e)) {
+                return true;
+            }
+            cur = cur.next;
+        }
+        return false;
+    }
+
+    /**
+     * 删除索引的元素
+     *
+     * @param index
+     * @return 被删除元素内容
+     */
+    public E remove(int index) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("Remove failed. Illegal index.");
+        }
+        Node prev = dummyHead;
+        for (int i = 0; i < index; i++) {
+            prev = prev.next;
+        }
+        Node delNode = prev.next;
+        prev.next = delNode.next;
+        delNode.next = null;//引用清楚，让JVM进行垃圾回收
+        size--;
+        return delNode.e;
+    }
+
+    public E removeFirst() {
+        return remove(0);
+    }
+
+    public E removeLast() {
+        return remove(size - 1);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        res.append("LinkedList: ");
+        Node cur = dummyHead.next;
+        while (cur != null) {
+            res.append(cur).append("->");
+            cur = cur.next;
+        }
+        res.append("NULL");
+        return res.toString();
     }
 }
