@@ -1,10 +1,9 @@
 package queue;
 
 import org.junit.jupiter.api.Test;
+import others.StructurePerformanceTester;
 
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class QueueTest {
 
@@ -15,9 +14,7 @@ class QueueTest {
      * @param opCount 运行个数
      * @return 运行时间（单位：秒）
      */
-    private static double testQueue(Queue<Integer> q, int opCount) {
-        long startTime = System.nanoTime();
-
+    private static void testQueue(Queue<Integer> q, int opCount) {
         Random random = new Random();
         for (int i = 0; i < opCount; i++) {
             q.enqueue(random.nextInt(Integer.MAX_VALUE));
@@ -25,20 +22,21 @@ class QueueTest {
         for (int i = 0; i < opCount; i++) {
             q.dequeue();
         }
-
-        long endTime = System.nanoTime();
-        return (endTime - startTime) / 1000000000.0;
     }
 
     @Test
     void test() {
-        int opCount = 100000;
+        int opCount = 200000;
         ArrayQueue<Integer> arrayQueue = new ArrayQueue<>();
-        double time1 = testQueue(arrayQueue, opCount);
+        double time1 = StructurePerformanceTester.run(() -> testQueue(arrayQueue, opCount));
         System.out.println("ArrayQueue, time: " + time1 + "s");
 
         LoopQueue<Integer> loopQueue = new LoopQueue<>();
-        double time2 = testQueue(loopQueue, opCount);
+        double time2 = StructurePerformanceTester.run(() -> testQueue(loopQueue, opCount));
         System.out.println("LoopQueue, time: " + time2 + "s");
+
+        LinkedListQueue<Integer> linkedListQueue = new LinkedListQueue<>();
+        double time3 = StructurePerformanceTester.run(() -> testQueue(linkedListQueue, opCount));
+        System.out.println("LinkedListQueue, time: " + time3 + "s");
     }
 }

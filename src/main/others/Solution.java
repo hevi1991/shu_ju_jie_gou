@@ -1,10 +1,11 @@
-package stack;
+package others;
 
 import java.util.Stack;
 
 /**
- * https://leetcode-cn.com/problems/valid-parentheses/
+ * leecode-cn.com
  */
+// https://leetcode-cn.com/problems/valid-parentheses/
 public class Solution {
     public boolean isValid(String s) {
         Stack<Character> stack = new Stack<>();
@@ -12,12 +13,12 @@ public class Solution {
             char c = s.charAt(i);
             if (c == '(' || c == '[' || c == '{') {
                 stack.push(c);
-            }else {
+            } else {
                 if (stack.isEmpty()) {
                     return false;
                 }
                 Character topChar = stack.pop();
-                if (c == ')' && topChar != '('){
+                if (c == ')' && topChar != '(') {
                     return false;
                 }
                 if (c == ']' && topChar != '[') {
@@ -31,4 +32,6 @@ public class Solution {
         }
         return stack.isEmpty();
     }
+
+
 }
